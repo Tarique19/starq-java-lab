@@ -14,8 +14,8 @@ public class JournalEntry {
     private String content;
     private LocalDateTime date;
 
-    public ObjectId getId() {
-        return id;
+    public String getId() {
+        return id != null ? id.toHexString() : null;
     }
 
     public void setId(ObjectId id) {

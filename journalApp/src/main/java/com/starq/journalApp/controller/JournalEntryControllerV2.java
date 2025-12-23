@@ -1,6 +1,7 @@
 package com.starq.journalApp.controller;
 
 import com.starq.journalApp.entity.JournalEntry;
+import com.starq.journalApp.exception.ResourceNotFoundException;
 import com.starq.journalApp.service.JournalEntryService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +23,11 @@ public class JournalEntryControllerV2 {
 
     @GetMapping("id/{myId}")
     public JournalEntry getJournalEntryById(@PathVariable ObjectId myId) {
-        return journalEntryService.findById(myId).orElse(null);
-
+        /*return journalEntryService.findById(myId).orElse(null);*/
+        return journalEntryService.findById(myId).orElseThrow(()->new ResourceNotFoundException("User Not Found"));
     }
 
-    @PostMapping
+    @PostMapping("/")
     public JournalEntry createEntry(@RequestBody JournalEntry journalEntry) {
         journalEntry.setDate(LocalDateTime.now());
         journalEntryService.saveEntry(journalEntry);
