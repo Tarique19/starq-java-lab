@@ -1,6 +1,7 @@
 package com.starq.journalApp.controller;
 
 import com.starq.journalApp.entity.JournalEntry;
+import com.starq.journalApp.exception.BadRequestException;
 import com.starq.journalApp.exception.ResourceNotFoundException;
 import com.starq.journalApp.service.JournalEntryService;
 import org.bson.types.ObjectId;
@@ -16,7 +17,7 @@ public class JournalEntryControllerV2 {
     @Autowired
     private JournalEntryService journalEntryService;
 
-    @GetMapping
+    @GetMapping("/all")
     public List<JournalEntry> getALl() {
         return journalEntryService.getAll();
     }
@@ -43,7 +44,7 @@ public class JournalEntryControllerV2 {
 
     @PutMapping("id/{id}")
     public JournalEntry updateJournalById(@PathVariable ObjectId id, @RequestBody JournalEntry newEntry) {
-        JournalEntry old = journalEntryService.findById(id).orElse(null);
+        JournalEntry old = journalEntryService.findById(id).orElseThrow(()-> new BadRequestException("Request Not FOUND"));
         if(old!=null){
             old.setTitle(newEntry.getTitle()!=null && !newEntry.getTitle().equals("")? newEntry.getTitle() : old.getTitle());
             old.setContent(newEntry.getContent()!=null && !newEntry.equals("") ? newEntry.getContent() : old.getContent());
